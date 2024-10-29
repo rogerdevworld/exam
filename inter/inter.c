@@ -12,49 +12,47 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include <unistd.h>
+
 int main(int argc, char **argv)
 {
 	int i = 0;
-	int j = 1;
+	int j;
 	char p;
-
 
 	if (argc == 3)
 	{
+		// Primer bucle: marca duplicados dentro de argv[1]
 		while (argv[1][i])
 		{
 			p = argv[1][i];
-			j = i + 1;	
+			j = i + 1;
 			while (argv[1][j])
 			{
 				if (p == argv[1][j])
-					argv[1][j] = 64;
+					argv[1][j] = '@';
 				j++;
 			}
 			i++;
 		}
+
+		// Segundo bucle: marca caracteres de argv[1] presentes en argv[2]
 		i = 0;
 		while (argv[1][i])
 		{
-			p = argv[1][i];
-			while (argv[2][j])
+			j = 0;
+			while (argv[2][j] && argv[1][i] != '@')
 			{
 				if (argv[1][i] == argv[2][j])
-					argv[1][i] = 64;
+				{
+					write(1, &argv[1][i], 1);
+					break;  // Imprime y sale del bucle para evitar duplicados
+				}
 				j++;
 			}
-			i++;
-		}
-		i = 0;
-		while (argv[1][i])
-		{
-			write(1, &argv[1][i], 1);
 			i++;
 		}
 	}
-	else
-		write(1, "\n", 1);
-	
-	printf("%s", argv[1]);
+	write(1, "\n", 1);
 	return (0);
 }
